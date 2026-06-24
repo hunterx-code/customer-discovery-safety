@@ -1,0 +1,4 @@
+interface:
+  display_name: "Customer Discovery Safety"
+  short_description: "Plan safer discovery outreach"
+  default_prompt: "Use $customer-discovery-safety to plan approval-gated customer discovery without accidental external actions."
