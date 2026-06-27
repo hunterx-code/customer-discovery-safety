@@ -24,6 +24,8 @@ External actions include sending emails or messages, submitting forms, posting p
 
 Before any external action, show the exact target, account or identity, channel, full body or payload, attachments or links, and the exact action that will occur. Wait for a clear confirmation such as `send`, `submit`, `confirm`, `发`, `提交`, or `确认`. Stop immediately on hesitation such as `wait`, `not yet`, `stop`, `等一下`, `先别`, `不要`, or `停`.
 
+This is an instruction-level workflow, not a sandbox, policy engine, compliance system, security control, or guaranteed prevention mechanism. It helps surface gates clearly inside the agent workflow; it does not technically enforce them outside that workflow.
+
 ## Workflow
 
 1. Read the local source of truth first.

@@ -1,6 +1,8 @@
 # Launch Post Draft
 
-I built a small Codex skill for a specific failure mode: an agent helps with customer discovery, then weak notes quietly turn into unauthorized outreach or fake validation.
+I built a small Codex skill for approval-gated customer discovery with AI agents.
+
+It handles a specific failure mode: an agent helps with customer discovery, then weak notes quietly turn into unauthorized outreach or fake validation.
 
 Customer Discovery Safety is meant to make that failure harder to miss.
 
@@ -19,7 +21,7 @@ Unsafe: "People want this. Send a buyer pitch and post in the community."
 
 Safer: "Demand is not validated. Draft one no-send approval packet for a current-behavior interview, and block external action until the exact target, sender, body, attachments, and approval are shown."
 
-It does not send anything. It does not make weak evidence stronger. It just makes the risky moments visible before anything leaves your machine.
+It does not send anything. It does not make weak evidence stronger. It is not a sandbox or compliance system. It just makes the risky moments visible before anything leaves your machine.
 
 Try it:
 

@@ -1,10 +1,12 @@
 # Customer Discovery Safety
 
-Stop agents from turning weak customer-discovery notes into unauthorized outreach or fake validation.
+[![CI](https://github.com/hunterx-code/customer-discovery-safety/actions/workflows/ci.yml/badge.svg)](https://github.com/hunterx-code/customer-discovery-safety/actions/workflows/ci.yml)
+
+Approval-gated customer discovery for AI agents.
 
 This Codex skill is for the moment when an agent is helping with customer discovery and things can get sloppy: a draft starts looking sendable, a weak reply starts looking like validation, or private notes start drifting into public docs.
 
-It keeps the work useful while making the agent stop at the risky parts.
+It keeps the work useful while making the agent pause before weak evidence turns into outreach, publishing, or fake validation.
 
 ## Who It Is For
 
@@ -104,15 +106,26 @@ Bad fit:
 - It does not publish or upload anything.
 - It does not make weak evidence stronger.
 - It does not replace manual review.
+- It is not a sandbox, policy engine, compliance system, security control, or guaranteed prevention mechanism.
+
+This is an instruction-level workflow for Codex. It helps the agent present external-action gates clearly, but it does not technically enforce those gates outside the agent workflow.
 
 ## Install
 
-Clone this repo and copy the skill folder into your Codex skills directory:
+Clone this repo:
 
 ```bash
 git clone https://github.com/hunterx-code/customer-discovery-safety.git
 cd customer-discovery-safety
 ```
+
+Install with Codex's `$skill-installer` from this GitHub repo when available:
+
+```text
+Use $skill-installer to install hunterx-code/customer-discovery-safety path customer-discovery-safety.
+```
+
+Or copy the skill folder directly into your Codex skills directory. The Codex skill installer installs into `$CODEX_HOME/skills/<skill-name>`, defaulting to `$HOME/.codex/skills/<skill-name>` when `CODEX_HOME` is unset.
 
 ```bash
 SKILLS_DIR="${CODEX_HOME:-$HOME/.codex}/skills"
