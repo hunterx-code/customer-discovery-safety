@@ -1,6 +1,6 @@
 ---
 name: customer-discovery-safety
-description: Customer discovery and outreach safety workflow for planning interviews, reviewing evidence, drafting no-send approval packets, and preparing public-facing material without accidental external actions. Use when Codex is asked to validate a product idea, plan customer discovery, classify weak vs strong market evidence, prepare or review outreach/email/DM/form/public-post drafts, enforce exact user approval before external actions, or scrub project-specific materials for public release.
+description: Customer-discovery safety circuit breaker for Codex. Use when reviewing discovery notes, classifying weak vs strong market evidence, preparing no-send outreach/email/DM/form/public-post drafts, enforcing exact approval before external actions, or scrubbing private project history from public docs.
 ---
 
 # Customer Discovery Safety

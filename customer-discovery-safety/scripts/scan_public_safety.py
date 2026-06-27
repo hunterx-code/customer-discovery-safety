@@ -65,17 +65,30 @@ def scan_file(path: Path, include_action_words: bool) -> list[tuple[str, int, st
     findings: list[tuple[str, int, str]] = []
     for lineno, line in enumerate(text.splitlines(), start=1):
         for name, pattern in patterns:
-            match = pattern.search(line)
-            if not match:
+            matches = list(pattern.finditer(line))
+            if not matches:
                 continue
-            if name == "email_address" and match.group(1).lower() in SAFE_EXAMPLE_DOMAINS:
-                continue
-            else:
+            if name == "email_address":
+                matches = [
+                    match
+                    for match in matches
+                    if match.group(1).lower() not in SAFE_EXAMPLE_DOMAINS
+                ]
+                if not matches:
+                    continue
+            for _match in matches[:1]:
                 snippet = line.strip()
                 if len(snippet) > 180:
                     snippet = snippet[:177] + "..."
                 findings.append((name, lineno, snippet))
     return findings
+
+
+def display_path(path: Path, root: Path) -> str:
+    try:
+        return str(path.relative_to(root))
+    except ValueError:
+        return str(path)
 
 
 def main() -> int:
@@ -97,12 +110,13 @@ def main() -> int:
             print(f"missing: {path}", file=sys.stderr)
         return 2
 
+    root = Path.cwd().resolve()
     findings_count = 0
     for path in iter_files(paths):
         findings = scan_file(path, args.include_action_words)
         for name, lineno, snippet in findings:
             findings_count += 1
-            print(f"{path}:{lineno}: {name}: {snippet}")
+            print(f"{display_path(path, root)}:{lineno}: {name}: {snippet}")
 
     if findings_count:
         print(f"\nFound {findings_count} item(s) to inspect before publication.")

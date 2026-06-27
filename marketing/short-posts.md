@@ -4,7 +4,9 @@
 
 Built a Codex skill for customer discovery work where agents can move too fast.
 
-It stops weak notes from turning into unauthorized outreach or fake validation.
+It helps stop weak notes from turning into unauthorized outreach or fake validation.
+
+Best for founders, PMs, and agent builders who want safer discovery drafts before anything leaves their machine.
 
 Repo: https://github.com/hunterx-code/customer-discovery-safety
 
@@ -22,4 +24,14 @@ Most customer-discovery automation fails by moving too fast: it sends too early,
 
 This skill slows down the risky parts while keeping local drafting fast.
 
+It does not send outreach or make weak evidence stronger. It makes the approval gate and evidence quality visible.
+
 Repo: https://github.com/hunterx-code/customer-discovery-safety
+
+## CTA
+
+Clone it, install the skill folder into Codex, then ask:
+
+```text
+Use $customer-discovery-safety to review these discovery notes and prepare any needed approval packet.
+```
