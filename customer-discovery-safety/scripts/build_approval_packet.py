@@ -21,10 +21,15 @@ REQUIRED_FIELDS = [
 
 def read_body(args: argparse.Namespace) -> str:
     if args.body and args.body_file:
-        raise SystemExit("Use either --body or --body-file, not both.")
+        raise ValueError("Use either --body or --body-file, not both.")
     if args.body_file:
         path = Path(args.body_file).expanduser()
-        return path.read_text(encoding="utf-8").strip()
+        try:
+            return path.read_text(encoding="utf-8").strip()
+        except OSError as exc:
+            raise ValueError(f"Could not read body file {path}: {exc.strerror}") from exc
+        except UnicodeDecodeError as exc:
+            raise ValueError(f"Could not read body file {path}: {exc}") from exc
     return (args.body or "").strip()
 
 
@@ -50,7 +55,9 @@ ACCOUNT_OR_IDENTITY: {values["identity"]}
 TARGET: {values["target"]}
 SUBJECT: {subject}
 BODY:
+BEGIN_BODY
 {values["body"]}
+END_BODY
 
 ATTACHMENTS_OR_LINKS: {attachments}
 PURPOSE: {values["purpose"]}
@@ -80,13 +87,19 @@ def main() -> int:
     parser.add_argument("--approval-phrase", required=True)
     args = parser.parse_args()
 
+    try:
+        body = read_body(args)
+    except ValueError as exc:
+        print(str(exc), file=sys.stderr)
+        return 2
+
     values = {
         "action": args.action,
         "channel": args.channel,
         "identity": args.identity,
         "target": args.target,
         "subject": args.subject,
-        "body": read_body(args),
+        "body": body,
         "attachments_or_links": args.attachments_or_links,
         "purpose": args.purpose,
         "not_authorized": args.not_authorized,

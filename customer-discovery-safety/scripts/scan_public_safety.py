@@ -18,6 +18,7 @@ TEXT_SUFFIXES = {
     ".json",
     ".csv",
     ".tsv",
+    ".svg",
     ".py",
     ".js",
     ".ts",
@@ -112,7 +113,12 @@ def main() -> int:
 
     root = Path.cwd().resolve()
     findings_count = 0
-    for path in iter_files(paths):
+    files = iter_files(paths)
+    if not files:
+        print("No scannable public files found.", file=sys.stderr)
+        return 2
+
+    for path in files:
         findings = scan_file(path, args.include_action_words)
         for name, lineno, snippet in findings:
             findings_count += 1
@@ -123,6 +129,7 @@ def main() -> int:
         return 1
 
     print("No public-safety scan findings.")
+    print(f"Scanned {len(files)} file(s).")
     return 0
 
 

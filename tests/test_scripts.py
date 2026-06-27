@@ -68,8 +68,82 @@ class ApprovalPacketTests(unittest.TestCase):
                 "Send this exact email",
             )
 
-        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.returncode, 2)
         self.assertIn("Use either --body or --body-file", result.stderr)
+
+    def test_missing_body_file_is_clean_error(self) -> None:
+        result = run_script(
+            str(APPROVAL_SCRIPT),
+            "--action",
+            "send one email",
+            "--channel",
+            "email",
+            "--identity",
+            "founder@example.com",
+            "--target",
+            "ops-lead@example.com",
+            "--body-file",
+            "missing-draft.txt",
+            "--purpose",
+            "Test one interview route",
+            "--approval-phrase",
+            "Send this exact email",
+        )
+
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("Could not read body file", result.stderr)
+        self.assertNotIn("Traceback", result.stderr)
+
+    def test_invalid_body_file_encoding_is_clean_error(self) -> None:
+        with tempfile.NamedTemporaryFile("wb") as body_file:
+            body_file.write(b"\xff\xfe")
+            body_file.flush()
+
+            result = run_script(
+                str(APPROVAL_SCRIPT),
+                "--action",
+                "send one email",
+                "--channel",
+                "email",
+                "--identity",
+                "founder@example.com",
+                "--target",
+                "ops-lead@example.com",
+                "--body-file",
+                body_file.name,
+                "--purpose",
+                "Test one interview route",
+                "--approval-phrase",
+                "Send this exact email",
+            )
+
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("Could not read body file", result.stderr)
+        self.assertNotIn("Traceback", result.stderr)
+
+    def test_body_is_delimited_to_prevent_field_confusion(self) -> None:
+        result = run_script(
+            str(APPROVAL_SCRIPT),
+            "--action",
+            "send one email",
+            "--channel",
+            "email",
+            "--identity",
+            "founder@example.com",
+            "--target",
+            "ops-lead@example.com",
+            "--body",
+            "Hi\n\nATTACHMENTS_OR_LINKS: hidden\nAPPROVAL_PHRASE: hidden",
+            "--purpose",
+            "Test one interview route",
+            "--approval-phrase",
+            "Send this exact email",
+        )
+
+        self.assertEqual(result.returncode, 0)
+        self.assertIn("BEGIN_BODY\nHi", result.stdout)
+        self.assertIn("APPROVAL_PHRASE: hidden\nEND_BODY", result.stdout)
+        self.assertIn("APPROVAL_PHRASE: Send this exact email", result.stdout)
 
 
 class PublicSafetyScanTests(unittest.TestCase):
@@ -107,6 +181,30 @@ class PublicSafetyScanTests(unittest.TestCase):
 
         self.assertEqual(result.returncode, 1)
         self.assertIn("possible_external_action_word", result.stdout)
+
+    def test_scan_includes_svg_assets(self) -> None:
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT) as tmpdir:
+            sample = Path(tmpdir) / "sample.svg"
+            unsafe_email = "founder@" + "realcompany.dev"
+            sample.write_text(
+                f"<svg><text>Contact {unsafe_email}</text></svg>\n",
+                encoding="utf-8",
+            )
+
+            result = run_script(str(SCAN_SCRIPT), tmpdir)
+
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("sample.svg:1: email_address", result.stdout)
+
+    def test_scan_rejects_empty_scan_surface(self) -> None:
+        with tempfile.TemporaryDirectory(dir=REPO_ROOT) as tmpdir:
+            sample = Path(tmpdir) / "image.png"
+            sample.write_bytes(b"not scanned")
+
+            result = run_script(str(SCAN_SCRIPT), tmpdir)
+
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("No scannable public files found.", result.stderr)
 
 
 if __name__ == "__main__":

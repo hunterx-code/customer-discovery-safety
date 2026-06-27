@@ -147,19 +147,20 @@ Run these checks after cloning:
 
 ```bash
 python3 -B -m unittest discover -s tests
-python3 customer-discovery-safety/scripts/scan_public_safety.py README.md CHANGELOG.md docs examples marketing customer-discovery-safety tests .github
+python3 customer-discovery-safety/scripts/scan_public_safety.py README.md CHANGELOG.md assets docs examples marketing customer-discovery-safety tests .github
 ```
 
 Expected normal scan result:
 
 ```text
 No public-safety scan findings.
+Scanned 17 file(s).
 ```
 
 The stricter scan intentionally flags external-action words for manual review:
 
 ```bash
-python3 customer-discovery-safety/scripts/scan_public_safety.py --include-action-words README.md CHANGELOG.md docs examples marketing customer-discovery-safety tests .github
+python3 customer-discovery-safety/scripts/scan_public_safety.py --include-action-words README.md CHANGELOG.md assets docs examples marketing customer-discovery-safety tests .github
 ```
 
 That mode can exit `1` when it finds terms like `send`, `post`, or `publish`. For this package, those hits are expected because the skill teaches external-action boundaries; inspect them before release rather than treating the exit code as an automatic failure.
@@ -184,13 +185,13 @@ python3 customer-discovery-safety/scripts/build_approval_packet.py \
 Scan public-facing files before release:
 
 ```bash
-python3 customer-discovery-safety/scripts/scan_public_safety.py README.md CHANGELOG.md docs examples marketing customer-discovery-safety tests .github
+python3 customer-discovery-safety/scripts/scan_public_safety.py README.md CHANGELOG.md assets docs examples marketing customer-discovery-safety tests .github
 ```
 
 Use a stricter scan that also flags generic action words:
 
 ```bash
-python3 customer-discovery-safety/scripts/scan_public_safety.py --include-action-words README.md CHANGELOG.md docs examples marketing customer-discovery-safety tests .github
+python3 customer-discovery-safety/scripts/scan_public_safety.py --include-action-words README.md CHANGELOG.md assets docs examples marketing customer-discovery-safety tests .github
 ```
 
 This stricter mode may exit `1` for expected action-language hits. Inspect each hit manually before release.

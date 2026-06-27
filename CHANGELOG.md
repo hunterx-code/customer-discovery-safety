@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+
+- Include SVG assets in the public-safety scan surface and CI validation.
+- Fail empty scan surfaces instead of reporting a misleading clean scan.
+- Delimit approval-packet body content with `BEGIN_BODY` / `END_BODY`.
+- Return a clean CLI error when `--body-file` cannot be read.
+
 ## v0.1.0 - Ready To Tag After Push
 
 Initial public release candidate for `customer-discovery-safety`.
@@ -20,7 +29,7 @@ Initial public release candidate for `customer-discovery-safety`.
 ### Validation
 
 - `python3 -B -m unittest discover -s tests`
-- `python3 customer-discovery-safety/scripts/scan_public_safety.py README.md examples marketing customer-discovery-safety tests .github docs`
+- `python3 customer-discovery-safety/scripts/scan_public_safety.py README.md CHANGELOG.md assets docs examples marketing customer-discovery-safety tests .github`
 
 ### Not Included
 

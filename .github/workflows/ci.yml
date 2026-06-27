@@ -19,4 +19,4 @@ jobs:
         run: PYTHONDONTWRITEBYTECODE=1 python -B -m unittest discover -s tests
 
       - name: Run public-safety scan
-        run: python customer-discovery-safety/scripts/scan_public_safety.py README.md CHANGELOG.md docs examples marketing customer-discovery-safety tests .github
+        run: python customer-discovery-safety/scripts/scan_public_safety.py README.md CHANGELOG.md assets docs examples marketing customer-discovery-safety tests .github

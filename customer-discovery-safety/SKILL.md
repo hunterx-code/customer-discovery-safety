@@ -71,7 +71,10 @@ CHANNEL: email / contact form / public forum / DM / call
 ACCOUNT_OR_IDENTITY: exact sender account, profile, or public identity
 TARGET: exact recipient, URL, group, or thread
 SUBJECT: exact subject, if any
-BODY: full final body
+BODY:
+BEGIN_BODY
+full final body
+END_BODY
 ATTACHMENTS_OR_LINKS: none, or exact files/links
 PURPOSE: what uncertainty this tests
 NOT_AUTHORIZED: list adjacent actions that are not included
